@@ -1,5 +1,3 @@
-import yaml
-
 from pydantic import BaseModel, schema_of
 from typing import List, Literal, Optional
 
@@ -197,11 +195,6 @@ class SocketDocumentation:
             return func
 
         return decorator
-
-    def save_to_yaml(self, file: str = 'asyncapi.yaml'):
-        data= self.main_data.dict()
-        with open(file, 'w+') as doc:
-            yaml.dump(data, doc)
 
     def set_asyncapi_version(self, asyncapi_version: Optional[Literal['2.0.0', '2.1.0', '2.2.0', '2.3.0', '2.4.0']]):
         self.main_data.asyncapi = asyncapi_version

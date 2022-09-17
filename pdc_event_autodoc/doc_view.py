@@ -1,5 +1,4 @@
 from pydantic import AnyHttpUrl
-from fastapi.responses import HTMLResponse
 
 def get_asyncapi_html(
     *,
@@ -25,4 +24,4 @@ def get_asyncapi_html(
     </body>
     </html>
     """
-    return HTMLResponse(html)
+    return html

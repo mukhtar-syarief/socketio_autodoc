@@ -71,5 +71,4 @@ def test_union_pydantic_data_with_none_type(sid, type_union_pydantic: Union[None
 def test_using_data_type_optional(sid, type_optional: Optional[str]):
     print('success')
 
-doc.save_to_yaml()
 
