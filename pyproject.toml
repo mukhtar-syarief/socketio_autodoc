@@ -1,8 +1,10 @@
 [tool.poetry]
 name = "pdc_event_autodoc"
 version = "0.1.0"
-description = ""
+description = "Autodoc for socket"
 authors = ["Mukhtar <mukhtar.syariefudin@gmail.com>"]
+readme = "README.md"
+license = 'MIT'
 
 [tool.poetry.dependencies]
 python = "^3.9"
