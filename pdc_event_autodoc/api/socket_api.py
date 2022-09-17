@@ -2,7 +2,9 @@ from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from pydantic import AnyHttpUrl
 
+#change this code bellow where is your class doc
 from ..socket_manager import doc
+######
 from ..views.socket_view import get_asyncapi_html
 
 
