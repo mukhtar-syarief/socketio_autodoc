@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pdc_event_autodoc"
-version = "0.0.1"
+version = "0.0.2"
 description = "Autodoc for socket"
 authors = ["Mukhtar <mukhtar.syariefudin@gmail.com>"]
 readme = "README.md"
