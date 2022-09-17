@@ -22,7 +22,7 @@ doc = SocketDocumentation()
 
 First time is set your application info like bellow:
 ```
-doc.set_info_app(title= 'Example', version= '1.0.0', description= 'This is example documentation of Example app version 1.0.0')
+doc.set_info_app(title= 'Example App', version= '1.0.0', description= 'This is example documentation of Example App version 1.0.0')
 ```
 
 
@@ -41,7 +41,7 @@ class PydanticModel(BaseModel):
         summary= 'ReceiveMessage', 
         description= 'This is event when we receive a message.')
 @sm.on('message')
-def test_general_schema_pydantic(sid, data: PydanticModel):
+def receive_message(sid, data: PydanticModel):
     return data.dict()
 ```
 
@@ -51,14 +51,8 @@ Or using general type like
         tags= ['PublishMessage'],
         summary= 'To Send a Message', 
         description= 'This is event when we want to send a message.')
-@doc.sub(event_name= 'message', 
-        tags= ['SubcribeMessage'], 
-        schema= PydanticModel, 
-        summary= 'ReceiveMessage', 
-        description= 'This is event when we receive a message.')
-def test_general_schema_pydantic(sid, data: str):
-    print(data)
-    return sm.emit('message', data, to_sid = sid)
+def sending_message(sid, data: str):
+    return sm.emit('message', data)
 ```
 
 To preview the documentation, you can using FastAPI or APIRouter.
@@ -82,7 +76,7 @@ def get_socket_json():
 
 @router.get('/socket_doc')
 def get_socket_documentation():
-    async_url= AnyHttpUrl('socket.json', scheme= 'http')
+    async_url= AnyHttpUrl('/socket.json', scheme= 'http')
     return get_asyncapi_html(asyncapi_url= async_url, title= 'Notification Service')
 ```
 In AnyHttpUrl if you using prefix, don't forget to include your prefix.!
