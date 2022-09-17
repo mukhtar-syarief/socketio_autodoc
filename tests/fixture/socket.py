@@ -9,6 +9,10 @@ class PydanticModel(BaseModel):
     address: str
 
 
+class NestedPydantic(BaseModel):
+    id: int
+    models: List[PydanticModel]
+
 
 @pytest.fixture
 def sid():
@@ -37,3 +41,7 @@ def type_union_pydantic() -> Union[str, PydanticModel]:
 @pytest.fixture
 def type_optional() -> Optional[str]:
     return 'optional'
+
+@pytest.fixture
+def nested() -> NestedPydantic:
+    return NestedPydantic(id= 2, models= [PydanticModel(id= 4, name = 'tasya', address= 'malayu')])

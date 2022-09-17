@@ -72,3 +72,8 @@ def test_using_data_type_optional(sid, type_optional: Optional[str]):
     print('success')
 
 
+@doc.sub(event_name= 'nested')
+@doc.pub(event_name= 'nested')
+@sm.on('pydantic')
+def test_schema_data_nested_pydantic(sid, data: NestedPydantic):
+    print('success')

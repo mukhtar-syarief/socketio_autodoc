@@ -439,8 +439,6 @@ assert doc.main_data.dict() == {
     }
 
 
-# union type data dengan pydantic
-
 doc.reset_documentation()
 doc.set_info_app(title= 'Test Aplications', version= '0.0.1', description= 'Hanya untuk test')
 
@@ -665,4 +663,104 @@ assert doc.main_data.dict() == {
         },
     }
 }
-# optional
+
+
+
+doc.reset_documentation()
+doc.set_info_app(title= 'Test Aplications', version= '0.0.1', description= 'Hanya untuk test')
+
+
+# @doc.pub(event_name='using_schema', schema= PydanticModel)
+# @sm.on('using_schema')
+# def create_using_schema(sid, data: List[str]):
+#     print('pass')
+
+# from pprint import pprint
+# pprint(doc.main_data.dict())
+# assert True == False
+
+
+
+
+@doc.sub(event_name= 'nested')
+@doc.pub(event_name= 'nested', schema= NestedPydantic)
+@sm.on('pydantic')
+def test_schema_nested_pydantic(sid, nested: NestedPydantic):
+    print('success')
+
+print(doc.main_data.dict())
+assert doc.main_data.dict() == {
+    'asyncapi': '2.2.0',
+        'channels': {
+            'nested': {
+                'publish': {
+                    'description': '',
+                    'message': {
+                        '$ref': '#/components/messages/nested'
+                    },
+                    'summary': '',
+                    'tags': []
+                    },
+                'subscribe': {
+                    'description': '',
+                    'message': {'$ref': '#/components/messages/nested'},
+                    'summary': '',
+                    'tags': []}}},
+        'components': {
+            'messages': {
+                'nested': {
+                    'payload': {
+                        '$ref': '#/components/schemas/nested'
+                    }
+                }
+            },
+            'schemas': {
+                'PydanticModel': {
+                    'properties': {
+                        'address': {
+                            'title': 'Address',
+                            'type': 'string'
+                        },
+                        'id': {
+                            'title': 'Id',
+                            'type': 'integer'
+                        },
+                        'name': {
+                            'title': 'Name',
+                            'type': 'string'
+                            }
+                        },
+                        'required': [
+                            'id',
+                            'name',
+                            'address'
+                        ],
+                        'title': 'PydanticModel',
+                        'type': 'object'
+                    },
+                'nested': {
+                    'properties': {
+                        'id': {
+                            'title': 'Id',
+                            'type': 'integer'
+                        },
+                        'models': {
+                            'items': {
+                                '$ref': '#/components/schemas/PydanticModel'
+                            },
+                            'title': 'Models',
+                            'type': 'array'
+                        }
+                    },
+                    'required': ['id', 'models'],
+                    'title': 'NestedPydantic',
+                    'type': 'object'
+                }
+            }
+        },
+    'info': {
+        'description': 'Hanya untuk test',
+        'title': 'Test Aplications',
+        'version': '0.0.1'
+    }
+}
