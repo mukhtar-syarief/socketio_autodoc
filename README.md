@@ -51,11 +51,43 @@ Or using general type like
         tags= ['PublishMessage'],
         summary= 'To Send a Message', 
         description= 'This is event when we want to send a message.')
-@sm.on('message')
+@doc.sub(event_name= 'message', 
+        tags= ['SubcribeMessage'], 
+        schema= PydanticModel, 
+        summary= 'ReceiveMessage', 
+        description= 'This is event when we receive a message.')
 def test_general_schema_pydantic(sid, data: str):
-    return sm.emit(sid, data)
+    print(data)
+    return sm.emit('message', data, to_sid = sid)
 ```
 
+To preview the documentation, you can using FastAPI or APIRouter.
+This is an example using APIRouter:
+
+```
+from fastapi import APIRouter
+from fastapi.encoders import jsonable_encoder
+from pydantic import AnyHttpUrl
+
+from pdc-event-autodoc.documentations.documentation import SocketDocumentation 
+from pdc-event-autodoc.views.socket_view import get_asyncapi_html
+
+doc = SocketDocumentation()
+
+router = APIRouter(tags= ['Socket Documentations])
+
+@router.get('/socket.json')
+def get_socket_json():
+    return jsonable_encoder(doc.main_data)
+
+@router.get('/socket_doc')
+def get_socket_documentation():
+    async_url= AnyHttpUrl('socket.json', scheme= 'http')
+    return get_asyncapi_html(asyncapi_url= async_url, title= 'Notification Service')
+```
+In AnyHttpUrl if you using prefix, don't forget to include your prefix.!
+
+The documentattion can be access in path '/socket_doc'.
 
 ## Notice
 ### Dont't forget to declare your type params (it can be Pydantic model, array, str, int, Optional or Union, etc).
