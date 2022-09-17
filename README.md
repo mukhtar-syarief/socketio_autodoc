@@ -15,7 +15,7 @@ Use decorator (@) to create documentation. There is two option to create documen
 First is class method sub to define the event under decorator is subscribe, The second is pub to define the event or method under decorator is to publish. In this bellow is example how to use the code:
 
 ```
-from pdc-event-autodoc.documentations.documentation import SocketDocumentation 
+from pdc_event_autodoc import SocketDocumentation 
 
 doc = SocketDocumentation()
 ```
@@ -63,8 +63,7 @@ from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from pydantic import AnyHttpUrl
 
-from pdc-event-autodoc.documentations.documentation import SocketDocumentation 
-from pdc-event-autodoc.views.socket_view import get_asyncapi_html
+from pdc_event_autodoc import SocketDocumentation, get_asyncapi_html
 
 doc = SocketDocumentation()
 

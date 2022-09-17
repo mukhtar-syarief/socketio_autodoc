@@ -1,7 +1,7 @@
 import socketio
 
 from ..fixture.socket import *
-from pdc_event_autodoc.documentations.documentation import SocketDocumentation
+from pdc_event_autodoc.documentation import SocketDocumentation
 
 
 sm: socketio.AsyncServer = socketio.AsyncServer()

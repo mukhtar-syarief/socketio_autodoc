@@ -3,7 +3,7 @@ import yaml
 from pydantic import BaseModel, schema_of
 from typing import List, Literal, Optional
 
-from .doc_schema import MainModel
+from .schemas.doc_schema import MainModel
 
 class SocketDocumentation:
 
