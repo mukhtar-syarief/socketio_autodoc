@@ -109,26 +109,66 @@ class SocketDocumentation:
                 del other_type['definitions']
         return other_type
 
+    def create_definitions_schema(self, schema: BaseModel = None):
+        for key in schema['definitions']:
+            if 'properties' in schema['definitions'][key]:
+                for item in schema['definitions'][key]['properties']:
+                    if 'items' in schema['definitions'][key]['properties'][item]:
+                        if '$ref' in schema['definitions'][key]['properties'][item]['items']:
+                            schema_name= schema['definitions'][key]['properties'][item]['items']['$ref'].split('/')[-1]
+                            schema['definitions'][key]['properties'][item]['items']['$ref'] = f'#/components/schemas/{schema_name}'
+                        if 'anyOf' in schema['definitions'][key]['properties'][item]:
+                            for data_dict in schema['definitions'][key]['properties'][item]['anyOf']:
+                                if data_dict == None:
+                                    continue
+                                if '$ref' in data_dict:
+                                    schema_name= data_dict['$ref'].split('/')[-1]
+                                    data_dict['$ref'] = f'#/components/schemas/{schema_name}'
+                    if '$ref' in schema['definitions'][key]['properties'][item]:
+                        schema_name= schema['definitions'][key]['properties'][item]['$ref'].split('/')[-1]
+                        schema['definitions'][key]['properties'][item]['$ref'] = f'#/components/schemas/{schema_name}'
+                    if 'anyOf' in schema['definitions'][key]['properties'][item]:
+                        for data_dict in schema['definitions'][key]['properties'][item]['anyOf']:
+                            if data_dict == None:
+                                continue
+                            if '$ref' in data_dict:
+                                schema_name= data_dict['$ref'].split('/')[-1]
+                                data_dict['$ref'] = f'#/components/schemas/{schema_name}'
+            self.create_schemas(event_name= key, schema=schema['definitions'][key])
+        return schema
+
+
     def check_nested_schema(self, schema_name: str = None, schema: BaseModel = None):
         if 'definitions' in schema:
+            self.create_definitions_schema(schema= schema)
             if 'properties' in schema:
                 for key in schema['properties']:
-                    for item in schema['properties'][key]:
-                        if 'items' == item:
-                            if '$ref' in schema['properties'][key][item]:
-                                schema_name= schema['properties'][key][item]['$ref'].split('/')[-1]
-                                schema['properties'][key][item]['$ref'] = f'#/components/schemas/{schema_name}'
-                                self.create_schemas(event_name= schema_name, schema=schema['definitions'][schema_name])
-                                del schema['definitions']
+                    if 'items' in schema['properties'][key]:
+                        if '$ref' in schema['properties'][key]['items']:
+                            schema_name= schema['properties'][key]['items']['$ref'].split('/')[-1]
+                            schema['properties'][key]['items']['$ref'] = f'#/components/schemas/{schema_name}'
+                    if '$ref' in schema['properties'][key]:
+                        schema_name= schema['properties'][key]['$ref'].split('/')[-1]
+                        schema['properties'][key]['$ref'] = f'#/components/schemas/{schema_name}'
+                    if 'anyOf' in schema['properties'][key]:
+                        for data_dict in schema['properties'][key]['anyOf']:
+                            if data_dict == None:
+                                continue
+                            if '$ref' in data_dict:
+                                schema_name= data_dict['$ref'].split('/')[-1]
+                                data_dict['$ref'] = f'#/components/schemas/{schema_name}'
+                del schema['definitions']
         return schema
 
     def create_schemas(self, event_name: str, schema: BaseModel = None, other_type= None):
         schema_content= self.get_schema(event_name)
         try:
-            schema_content.update(schema)
+            if schema_content == {}:
+                schema_content.update(schema)
         except:
-            other_type = self.parse_union_type(other_type= other_type)
-            schema_content.update(other_type)
+            if schema_content == {}:
+                other_type = self.parse_union_type(other_type= other_type)
+                schema_content.update(other_type)
         return schema_content
 
     def create(self,

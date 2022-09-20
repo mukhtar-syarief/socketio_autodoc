@@ -690,77 +690,62 @@ def test_schema_nested_pydantic(sid, nested: NestedPydantic):
 
 print(doc.main_data.dict())
 assert doc.main_data.dict() == {
-    'asyncapi': '2.2.0',
-        'channels': {
-            'nested': {
-                'publish': {
-                    'description': '',
-                    'message': {
-                        '$ref': '#/components/messages/nested'
-                    },
-                    'summary': '',
-                    'tags': []
-                    },
-                'subscribe': {
-                    'description': '',
-                    'message': {'$ref': '#/components/messages/nested'},
-                    'summary': '',
-                    'tags': []}}},
-        'components': {
-            'messages': {
-                'nested': {
-                    'payload': {
-                        '$ref': '#/components/schemas/nested'
-                    }
-                }
-            },
-            'schemas': {
-                'PydanticModel': {
-                    'properties': {
-                        'address': {
-                            'title': 'Address',
-                            'type': 'string'
-                        },
-                        'id': {
-                            'title': 'Id',
-                            'type': 'integer'
-                        },
-                        'name': {
-                            'title': 'Name',
-                            'type': 'string'
-                            }
-                        },
-                        'required': [
-                            'id',
-                            'name',
-                            'address'
-                        ],
-                        'title': 'PydanticModel',
-                        'type': 'object'
-                    },
-                'nested': {
-                    'properties': {
-                        'id': {
-                            'title': 'Id',
-                            'type': 'integer'
-                        },
-                        'models': {
-                            'items': {
-                                '$ref': '#/components/schemas/PydanticModel'
-                            },
-                            'title': 'Models',
-                            'type': 'array'
-                        }
-                    },
-                    'required': ['id', 'models'],
-                    'title': 'NestedPydantic',
-                    'type': 'object'
+    'asyncapi': '2.2.0', 
+    'info': {
+        'title': 'Test Aplications', 
+        'version': '0.0.1', 
+        'description': 'Hanya untuk test'
+        }, 
+    'channels': {
+        'nested': {
+            'subscribe': {
+                'summary': '', 
+                'description': '', 
+                'message': {
+                    '$ref': '#/components/messages/nested'
+                    }, 
+                'tags': []
+                }, 
+            'publish': {
+                'summary': '', 
+                'description': '', 
+                'message': {
+                    '$ref': '#/components/messages/nested'
+                    }, 
+                'tags': []
                 }
             }
-        },
-    'info': {
-        'description': 'Hanya untuk test',
-        'title': 'Test Aplications',
-        'version': '0.0.1'
+        }, 
+    'components': {
+        'messages': {
+            'nested': {
+                'payload': {
+                    '$ref': '#/components/schemas/nested'
+                    }
+                }
+            }, 
+        'schemas': {
+            'nested': {
+                'title': 'NestedPydantic', 
+                'type': 'object', 
+                'properties': {
+                    'id': {
+                        'title': 'Id', 
+                        'type': 'integer'
+                        }, 
+                    'models': {
+                        'title': 'Models', 
+                        'type': 'array', 
+                        'items': {
+                            '$ref': '#/components/schemas/PydanticModel'
+                            }
+                        }
+                    }, 
+                'required': [
+                    'id', 
+                    'models'
+                    ]
+                }
+            }
+        }
     }
-}
